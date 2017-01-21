@@ -1,0 +1,23 @@
+{
+  "name": "activize",
+  "version": "1.0.0",
+  "description": "a protest organization and coordination app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/fersot100/activize.git"
+  },
+  "author": "Juan F. Erazo Caitlin Gray",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fersot100/activize/issues"
+  },
+  "homepage": "https://github.com/fersot100/activize#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "underscore": "^1.8.3"
+  }
+}
