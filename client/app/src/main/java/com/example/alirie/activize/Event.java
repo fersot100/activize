@@ -7,7 +7,9 @@ public class Event {
     public Event(String name, String dateTime, String description){
         eventName = name;
         eventTime = dateTime;
-
+        eventDescription = description;
+    }
+    public Event(){
     }
 
     public String getName(){
