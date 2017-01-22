@@ -51,9 +51,7 @@ public class CreateEvent extends AppCompatActivity {
     GraphicsLayer locationLayer;
     static final int LOCATION_REQUEST = 1;
     static final int REQUEST_OK = 2;
-    MapView mapView;
-    Point locationLayerPoint;
-    String locationLayerPointString, timeForExport, AM_PM, latlng, address;
+    String timeForExport, AM_PM, address, latlng;
     int eventDay, eventMonth, eventYear, year, month, day;
     int minute, hour;
     Boolean isMapLoaded;
@@ -86,17 +84,13 @@ public class CreateEvent extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == REQUEST_OK){
             //set edittext to address
-            String latlngraw = data.getStringExtra("Result_LATLNG");
+            latlng = (data.getStringExtra("Result_LATLNG"));
             address = data.getStringExtra("Result_ADDRESS");
-            String [] parts = latlng.split(" ");
-            String lat = parts[0];
-            String lng = parts[1];
-            locationElement.setText(lat + " " + lng);
-            locationElement.append(address);
+            locationElement.setText(address);
+            locationElement.append(latlng);
             try {
                 JSONObject locationJSON = new JSONObject();
-                locationJSON.put("Latitude", lat);
-                locationJSON.put("Longitude", lng);
+                locationJSON.put("LatLng", latlng);
                 locationJSON.put("Address", address);
             }catch (JSONException e){
                 e.printStackTrace();
@@ -168,14 +162,13 @@ public class CreateEvent extends AppCompatActivity {
         String time = timeElement.getText().toString();
         String description = descriptionElement.getText().toString();
         Event newEvent = new Event(name, date + " " + time, description, latlng, address);
-        Intent i = new Intent();
-        i.putExtra("name", name);
-        i.putExtra("dateTime", date + " at " + time);
-        i.putExtra("description", description);
+        Intent i = new Intent(this, EventPage.class);
+        i.putExtra("name", newEvent.getName());
+        i.putExtra("dateTime", newEvent.getDateTime());
+        i.putExtra("description", newEvent.getDescription());
         i.putExtra("latlng", latlng);
-        i.putExtra("address", address);
+        i.putExtra("address", newEvent.getAddress());
         startActivity(i);
     }
-
 
 }

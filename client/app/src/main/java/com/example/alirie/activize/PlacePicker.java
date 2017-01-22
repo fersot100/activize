@@ -163,8 +163,10 @@ public class PlacePicker extends AppCompatActivity {
                 LocatorGeocodeResult geocodeResult = result.get(0);
 
                 // get return geometry from geocode result
+                //convert XY to Lat + Long
                 SpatialReference sp = SpatialReference.create(4326);
-                final Point resultPoint = (Point) GeometryEngine.project(geocodeResult.getLocation(), mapView.getSpatialReference(), sp);
+                Point resultPoint = (Point) GeometryEngine.project(geocodeResult.getLocation(), mapView.getSpatialReference(), sp);
+
                 // create marker symbol to represent location
                 SimpleMarkerSymbol resultSymbol = new SimpleMarkerSymbol(Color.RED, 16, SimpleMarkerSymbol.STYLE.CROSS);
                 // create graphic object for resulting location
@@ -190,7 +192,6 @@ public class PlacePicker extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager(), "dialog");
                 }
             }
-
         }
 
     public static class PlacePickerDialog extends DialogFragment {
