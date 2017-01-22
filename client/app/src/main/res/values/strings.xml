@@ -23,4 +23,10 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_event_page">EventPage</string>
+    <string-array name="options_array">
+        <item>"First Aid"</item>
+        <item>"Water Fountain"</item>
+        <item>"Police"</item>
+    </string-array>
+
 </resources>

@@ -168,7 +168,7 @@ public class CreateEvent extends AppCompatActivity {
         i.putExtra("name", newEvent.getName());
         i.putExtra("dateTime", newEvent.getDateTime());
         i.putExtra("description", newEvent.getDescription());
-        i.putExtra("latlng", newEvent.getLatLng());
+        i.putExtra("latlng", latlng);
         i.putExtra("address", newEvent.getAddress());
         startActivity(i);
 

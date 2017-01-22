@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         //toolbar w/ "sort by" and "create event"
         //clicking on an event brings up event page with map
         String events[] = {
-                "memes",
-                "dreams",
-                "creams",
-                "queens",
+                "Smash the Fash",
+                "Free the Nipple",
+                "Flash Mob",
+                "Red Umbrella Day"
         };
         ArrayAdapter<String> eventAdapter =
                 new ArrayAdapter<String>(this,
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("name", eventToOpen.getName());
         i.putExtra("description", eventToOpen.getDescription());
         i.putExtra("latlng", eventToOpen.getLatLng());
-        i.putExtra("startTime", eventToOpen.getDateTime());
+        i.putExtra("dateTime", eventToOpen.getDateTime());
         i.putExtra("address", eventToOpen.getAddress());
         startActivity(i);
     }
@@ -108,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
         try{
             String name = event.getString("name");
             String description = event.getString("description");
-            String latlong = event.getString("latlng");
+            String latlng = event.getString("latlng");
             String address = event.getString("address");
             String time = event.getString("startTime");
-            return new Event(name, description, time, latlong, address);
+            return new Event(name, description, time, latlng, address);
         }catch (JSONException e){
             e.printStackTrace();
             return null;

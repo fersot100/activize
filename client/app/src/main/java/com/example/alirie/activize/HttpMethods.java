@@ -1,5 +1,4 @@
 package com.example.alirie.activize;
-import android.net.http.RequestQueue;
 
 import android.util.Log;
 import org.json.JSONArray;
@@ -22,10 +21,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-
-/**
- * Created by john on 1/21/17.
- */
 
 public class HttpMethods {
     private OkHttpClient client = new OkHttpClient();
@@ -88,7 +83,6 @@ public class HttpMethods {
         String json = eventJSON.toString();
         try{
             post("http://ec2-35-165-244-31.us-west-2.compute.amazonaws.com/events", json);
-            Log.i("log", json.toString());
         }catch (IOException e){
 
         }
