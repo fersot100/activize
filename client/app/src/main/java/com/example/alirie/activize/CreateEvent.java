@@ -58,6 +58,7 @@ public class CreateEvent extends AppCompatActivity {
     EditText timeElement, dateElement, locationElement, nameElement, descriptionElement;
     Time now = new Time();
     Time eventTime = new Time();
+    String uri = "http://ec2-35-165-244-31.us-west-2.compute.amazonaws.com/events";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,6 @@ public class CreateEvent extends AppCompatActivity {
             latlng = (data.getStringExtra("Result_LATLNG"));
             address = data.getStringExtra("Result_ADDRESS");
             locationElement.setText(address);
-            locationElement.append(latlng);
             try {
                 JSONObject locationJSON = new JSONObject();
                 locationJSON.put("LatLng", latlng);
@@ -162,6 +162,8 @@ public class CreateEvent extends AppCompatActivity {
         String time = timeElement.getText().toString();
         String description = descriptionElement.getText().toString();
         Event newEvent = new Event(name, date + " " + time, description, latlng, address);
+        HttpMethods httpMethods = new HttpMethods();
+        httpMethods.export(newEvent);
         Intent i = new Intent(this, EventPage.class);
         i.putExtra("name", newEvent.getName());
         i.putExtra("dateTime", newEvent.getDateTime());
@@ -169,6 +171,7 @@ public class CreateEvent extends AppCompatActivity {
         i.putExtra("latlng", latlng);
         i.putExtra("address", newEvent.getAddress());
         startActivity(i);
+
     }
 
 }

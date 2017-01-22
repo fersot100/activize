@@ -34,31 +34,6 @@ public class HttpMethods {
             = MediaType.parse("application/json; charset=utf-8");
     public HttpMethods(){}
 
-    public String httpGET(URL url) throws IOException {
-        String jsonResponse = "";
-        HttpURLConnection urlConnection = null;
-        InputStream inputStream = null;
-        try {
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
-            urlConnection.connect();
-            inputStream = urlConnection.getInputStream();
-            jsonResponse = readFromStream(inputStream);
-        } catch (IOException e) {
-            // TODO: Handle the exception
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (inputStream != null) {
-                // function must handle java.io.IOException here
-                inputStream.close();
-            }
-        }
-        return jsonResponse;
-    }
     /* OKHttp Methods */
     void post(String url, String json) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
@@ -101,97 +76,24 @@ public class HttpMethods {
         });
     }
 
-    //get all events
-    public void getEvents(String url) throws IOException{
-        final Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        final Callback callback = new Callback(){
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    //get JSONArray of events
-                    JSONArray events = new JSONArray(response.body().string());
-                    response.close();
-                    //TODO: something with the arrya
-                }catch (Exception e) {
-                    e.printStackTrace();}
-            }
-        };
-        client.newCall(request).enqueue(callback);
-    }
-
-    //get a single event by ID
-    public void getEventById(String url, String id) throws IOException{
-        String uri = url + "/events/" + id;
-        final Request req = new Request.Builder()
-                .url(uri)
-                .build();
-        final Callback callback = new Callback(){
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    JSONObject event = new JSONObject(response.body().string());
-                    response.close();
-                    //TODO:something with the event object
-                }catch (Exception e) {
-                    e.printStackTrace();}
-            }
-        };
-        client.newCall(req).enqueue(callback);
-    }
-
-    public String httpPOST(URL url) throws IOException{
-        String jsonResponse = "";
-        HttpURLConnection urlConnection = null;
-        InputStream inputStream = null;
+    void export(Event event) {
+        JSONObject eventJSON = new JSONObject();
         try {
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
-            urlConnection.connect();
-            inputStream = urlConnection.getInputStream();
-            jsonResponse = readFromStream(inputStream);
-        } catch (IOException e) {
-            // TODO: Handle the exception
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (inputStream != null) {
-                // function must handle java.io.IOException here
-                inputStream.close();
-            }
+            eventJSON.put("name", event.getName());
+            eventJSON.put("description", event.getDescription());
+            eventJSON.put("latlng", event.getLatLng());
+            eventJSON.put("startTime", event.getDateTime());
+            eventJSON.put("address", event.getAddress());
+        }catch (JSONException e){
+            e.printStackTrace();
         }
-        return jsonResponse;
-    }
+        String json = eventJSON.toString();
+        try{
+            post("http://ec2-35-165-244-31.us-west-2.compute.amazonaws.com/events", json);
+        }catch (IOException e){
 
-    // Request a string response from the provided URL.
-    StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-            new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    // Display the first 500 characters of the response string.
-                    mTextView.setText("Response is: "+ response.substring(0,500));
-                }
-            }, new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            mTextView.setText("That didn't work!");
         }
-    });
-// Add the request to the RequestQueue.
-    queue.add(stringRequest);
+    }
 
 
 }
