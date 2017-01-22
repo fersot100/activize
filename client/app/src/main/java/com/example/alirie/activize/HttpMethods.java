@@ -30,9 +30,7 @@ import okhttp3.ResponseBody;
 public class HttpMethods {
     private OkHttpClient client = new OkHttpClient();
     private String postResponse;
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
-    public HttpMethods(){}
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     /* OKHttp Methods */
     void post(String url, String json) throws IOException {

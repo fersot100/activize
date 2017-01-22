@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
 				len: [1, 50]
 			}
 		},
-		location: {
+		description: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
@@ -16,6 +16,9 @@ module.exports = function(sequelize, DataTypes) {
 			}
 		},
 		startTime: {
+			type: DataTypes.STRING
+		},
+		latlng: {
 			type: DataTypes.STRING
 		}
 	});
