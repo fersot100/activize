@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateEvent" />
-        <activity android:name=".PlacePicker"></activity>
+        <activity android:name=".PlacePicker" />
     </application>
 
 </manifest>
