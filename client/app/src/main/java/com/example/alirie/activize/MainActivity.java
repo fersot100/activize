@@ -22,16 +22,11 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     private OkHttpClient client = new OkHttpClient();
+    String url = "http://ec2-35-165-244-31.us-west-2.compute.amazonaws.com";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //load splash page
-        //get list of events
-        //populate UI with event cards
-        //hide splash, display events
-        //toolbar w/ "sort by" and "create event"
-        //clicking on an event brings up event page with map
         String events[] = {
                 "Smash the Fash",
                 "Free the Nipple",
@@ -47,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
                 );
         ListView eventList = (ListView) findViewById(R.id.list);
         eventList.setAdapter(eventAdapter);
+        try {
+            getEvents(url + "/events");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
     //get all events and populate UI with textviews for each
     public void getEvents(String url) throws IOException{
