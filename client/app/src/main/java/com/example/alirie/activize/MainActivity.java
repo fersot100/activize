@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 "Smash the Fash",
                 "Free the Nipple",
                 "Flash Mob",
+                "No DAPL",
                 "Red Umbrella Day"
         };
         ArrayAdapter<String> eventAdapter =

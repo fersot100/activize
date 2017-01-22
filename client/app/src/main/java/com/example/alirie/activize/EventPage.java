@@ -49,14 +49,15 @@ public class EventPage extends AppCompatActivity {
         String lng = parts[1];
         Log.i("lat", lat);
         Log.i("long", lng);
+
         StreetsBaseMap = new MapOptions(MapOptions.MapType.STREETS, Double.parseDouble(lat), Double.parseDouble(lng), 9);
         mapView = new MapView(EventPage.this, StreetsBaseMap);
         mapView.setId(R.id.eventMap);
         nameView = (TextView) findViewById(R.id.name);
         nameView.setText(eventName);
-        ViewGroup viewGroup = (RelativeLayout) findViewById(R.id.activity_event_page);
-        int heightDp = getResources().getDisplayMetrics().heightPixels / 3;
+
         final GraphicsLayer layer = new GraphicsLayer();
+
         // create a simple marker symbol to be used by our graphic
         SimpleMarkerSymbol sms = new SimpleMarkerSymbol(Color.RED, 5, SimpleMarkerSymbol.STYLE.CIRCLE);
         // create a point geometry that defines the graphic
@@ -65,9 +66,14 @@ public class EventPage extends AppCompatActivity {
         Graphic graphic = new Graphic(pnt, sms);
         // add the graphic to a graphics layer
         layer.addGraphic(graphic);
+        //add layer to map view
         mapView.addLayer(layer);
+
+        ViewGroup viewGroup = (RelativeLayout) findViewById(R.id.activity_event_page);
+        int heightDp = getResources().getDisplayMetrics().heightPixels / 3;
         mapView.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, heightDp));
         viewGroup.addView(mapView);
+        //when map is touched, open dialog
         mapView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
