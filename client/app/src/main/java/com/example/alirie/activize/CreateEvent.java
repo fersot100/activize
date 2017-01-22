@@ -77,9 +77,10 @@ public class CreateEvent extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
+        if (resultCode == 2){
             //set edittext to address
             locationElement.setText(data.getStringExtra("Result_DATA"));
+            Toast.makeText(this, data.getStringExtra("Result_DATA"),  Toast.LENGTH_LONG).show();
         }
     }
 

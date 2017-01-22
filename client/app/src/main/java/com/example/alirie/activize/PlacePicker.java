@@ -40,9 +40,10 @@ public class PlacePicker extends AppCompatActivity {
     GraphicsLayer locationLayer;
     EditText searchBar;
     String locationLayerPointString;
-    Point locationLayerPoint;
+    static Point locationLayerPoint;
+    AlertDialog dialogGlobal = null;
     public static final String Result_DATA = "Result_DATA";
-    static final int REQUEST_RESULT = 1;
+    static final int RESULT_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,41 +166,72 @@ public class PlacePicker extends AppCompatActivity {
                 Graphic resultText = new Graphic(resultPoint, resultAddress);
                 // add address text graphic to location graphics layer
                 locationLayer.addGraphic(resultText);
-
                 locationLayerPoint = resultPoint;
 
                 // Zoom map to geocode result location
                 mapView.zoomToResolution(geocodeResult.getLocation(), 2);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(PlacePicker.this);
-                builder.setMessage(R.string.select_prompt)
-                        .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Double latitude = resultPoint.getY();
-                                Double longitude = resultPoint.getX();
-                                dialog.dismiss();
-                                Intent sendIntent = new Intent();
-                                sendIntent.putExtra(Result_DATA, latitude + " " + longitude);
-                                finish();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                builder.create().show();
+                PlacePickerDialog dialog = new PlacePickerDialog();
+                dialog.show(getSupportFragmentManager(), "dialog");
+                }
             }
+
+        }
+
+    public static class PlacePickerDialog extends DialogFragment{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.select_prompt)
+                    .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Double latitude = locationLayerPoint.getY();
+                            Double longitude = locationLayerPoint.getX();
+                            dialog.dismiss();
+                            Intent sendIntent = new Intent();
+                            sendIntent.putExtra(Result_DATA, latitude + " " + longitude);
+                            getActivity().setResult(RESULT_CODE, sendIntent);
+                            getActivity().finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            getActivity().finish();
+                        }
+                    });
+            return builder.create();
+        }
+    }
+
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if (dialogGlobal!=null && dialogGlobal.isShowing()){
+            dialogGlobal.dismiss();
         }
     }
 
     @Override
-    public void onBackPressed() {
-        // When the user hits the back button set the resultCode
-        // to Activity.RESULT_CANCELED to indicate a failure
-        setResult(Activity.RESULT_CANCELED);
-        super.onBackPressed();
+    protected void onPause(){
+        super.onPause();
+        if (dialogGlobal!=null && dialogGlobal.isShowing()){
+            dialogGlobal.dismiss();
+        }
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if (dialogGlobal!=null && dialogGlobal.isShowing()){
+            dialogGlobal.dismiss();
+        }
     }
 
 
-}
+
+    }
+
+
+
+
