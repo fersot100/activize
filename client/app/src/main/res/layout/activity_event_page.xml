@@ -7,11 +7,14 @@
     tools:context="com.example.alirie.activize.EventPage">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:maxLines="1"
         android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textAlignment="center"
         android:layout_below="@+id/eventMap"
         android:id="@+id/name" />
 

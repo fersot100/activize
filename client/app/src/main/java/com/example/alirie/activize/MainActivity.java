@@ -3,10 +3,12 @@ package com.example.alirie.activize;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,10 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            ListView eventList = (ListView) findViewById(R.id.list);
-            for (int j = 0; j < listOfEvents.size(); j++){
-                listOfEventNames.add(listOfEvents.get(j).getName());
-            }
+            final ListView eventList = (ListView) findViewById(R.id.list);
             ArrayAdapter<String> eventAdapter =
                     new ArrayAdapter<String>(getApplicationContext(),
                             R.layout.event_card,
@@ -59,13 +58,15 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     try {
-                        getEventById(url, view.getTag().toString());
+                        getEventById(url, listOfEventIDs.get(position).toString());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             });
             eventList.setAdapter(eventAdapter);
+
+
         }
     };
 
@@ -154,7 +155,9 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < array.length(); i++) {
                 //add new event to ArrayList
                 listOfEvents.add(createEventObject(array.getJSONObject(i)));
+                listOfEventNames.add(listOfEvents.get(i).getName());
                 listOfEventIDs.add(eventID);
+                Log.i("number", Integer.toString(eventID));
             }
     }catch (Exception e){
             e.printStackTrace();
