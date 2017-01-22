@@ -53,7 +53,7 @@ public class CreateEvent extends AppCompatActivity {
     static final int REQUEST_OK = 2;
     MapView mapView;
     Point locationLayerPoint;
-    String locationLayerPointString, timeForExport, AM_PM, id;
+    String locationLayerPointString, timeForExport, AM_PM, latlng, address;
     int eventDay, eventMonth, eventYear, year, month, day;
     int minute, hour;
     Boolean isMapLoaded;
@@ -68,7 +68,8 @@ public class CreateEvent extends AppCompatActivity {
         dateElement = (EditText) findViewById(R.id.input_date);
         timeElement = (EditText) findViewById(R.id.input_time);
         locationElement = (EditText) findViewById(R.id.input_location);
-        nameElement = (EditText) findViewById()
+        nameElement = (EditText) findViewById(R.id.input_event_name);
+        descriptionElement = (EditText) findViewById(R.id.input_event_description);
         now.setToNow();
         year = now.year;
         month = now.month;
@@ -85,8 +86,8 @@ public class CreateEvent extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == REQUEST_OK){
             //set edittext to address
-            String latlng = data.getStringExtra("Result_LATLNG");
-            String address = data.getStringExtra("Result_ADDRESS");
+            String latlngraw = data.getStringExtra("Result_LATLNG");
+            address = data.getStringExtra("Result_ADDRESS");
             String [] parts = latlng.split(" ");
             String lat = parts[0];
             String lng = parts[1];
@@ -162,9 +163,18 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     public void createNewEvent(View v){
-
-        Event newEvent = new Event()
-
+        String name = nameElement.getText().toString();
+        String date = dateElement.getText().toString();
+        String time = timeElement.getText().toString();
+        String description = descriptionElement.getText().toString();
+        Event newEvent = new Event(name, date + " " + time, description, latlng, address);
+        Intent i = new Intent();
+        i.putExtra("name", name);
+        i.putExtra("dateTime", date + " at " + time);
+        i.putExtra("description", description);
+        i.putExtra("latlng", latlng);
+        i.putExtra("address", address);
+        startActivity(i);
     }
 
 
