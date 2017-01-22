@@ -1,7 +1,11 @@
 package com.example.alirie.activize;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -84,8 +88,27 @@ public class PlacePicker extends AppCompatActivity {
         String address = searchBar.getText().toString();
         executeLocatorTask(address);
         //show dialog asking if they'd like to select
-        //showPlacePickerDialog();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage(R.string.search_prompt);
+        builder.setPositiveButton(R.string.select, new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id) {
+                Double longitude = locationLayerPoint.getX();
+                Double latitude = locationLayerPoint.getY();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
+
+
+
 
     private void executeLocatorTask(String address) {
         // Create Locator parameters from single line address string
