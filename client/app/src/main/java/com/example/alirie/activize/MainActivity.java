@@ -15,14 +15,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(android.R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         //load splash page
         //get list of events
         //populate UI with event cards
         //hide splash, display events
         //toolbar w/ "sort by" and "create event"
         //clicking on an event brings up event page with map
-        String events[] = {
+        /*String events[] = {
                 "memes",
                 "dreams",
                 "creams",
@@ -31,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
         };
         ArrayAdapter<String> eventAdapter =
                 new ArrayAdapter<String>(this,
-                        android.R.layout.event_card,
-                        android.R.id.event,
+                        R.layout.event_card,
+                        R.id.event,
                         events
                 );
         ListView eventList = new ListView(this);
         setContentView(eventList);
-        eventList.setAdapter(eventAdapter);
+        eventList.setAdapter(eventAdapter);*/
     }
 
 

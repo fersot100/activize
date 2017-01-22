@@ -57,7 +57,7 @@ public class CreateEvent extends AppCompatActivity {
     int eventDay, eventMonth, eventYear, year, month, day;
     int minute, hour;
     Boolean isMapLoaded;
-    EditText timeElement, dateElement, locationElement;
+    EditText timeElement, dateElement, locationElement, nameElement, descriptionElement;
     Time now = new Time();
     Time eventTime = new Time();
 
@@ -68,6 +68,7 @@ public class CreateEvent extends AppCompatActivity {
         dateElement = (EditText) findViewById(R.id.input_date);
         timeElement = (EditText) findViewById(R.id.input_time);
         locationElement = (EditText) findViewById(R.id.input_location);
+        nameElement = (EditText) findViewById()
         now.setToNow();
         year = now.year;
         month = now.month;
@@ -161,7 +162,8 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     public void createNewEvent(View v){
-        //Event newEvent = new Event()
+
+        Event newEvent = new Event()
 
     }
 
