@@ -105,8 +105,10 @@ public class HttpMethods {
                 String eventName = event.getString("eventName");
                 String description = event.getString("description");
                 String date = event.getString("dateTime");
+                String latlng = event.getString("latlng");
+                String address = event.getString("address");
                 // Create a new {@link Event} object
-                return new Event(eventName, description, date);
+                return new Event(eventName, description, date, latlng, address);
         } catch (JSONException e) {
             Log.e("Error--->", "Problem parsing the JSON results", e);
         }
