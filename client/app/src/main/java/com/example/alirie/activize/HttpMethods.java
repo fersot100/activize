@@ -47,6 +47,31 @@ public class HttpMethods {
         }
         return jsonResponse;
     }
+    public String httpPOST(URL url) throws IOException{
+        String jsonResponse = "";
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setReadTimeout(10000 /* milliseconds */);
+            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.connect();
+            inputStream = urlConnection.getInputStream();
+            jsonResponse = readFromStream(inputStream);
+        } catch (IOException e) {
+            // TODO: Handle the exception
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                // function must handle java.io.IOException here
+                inputStream.close();
+            }
+        }
+        return jsonResponse;
+    }
 
     public String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
