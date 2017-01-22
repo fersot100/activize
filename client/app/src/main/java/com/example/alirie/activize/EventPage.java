@@ -17,7 +17,8 @@ public class EventPage extends AppCompatActivity {
         setContentView(R.layout.activity_event_page);
         mapView = (MapView) findViewById(R.id.eventMap);
         Intent i = getIntent();
-        String latlng = i.getStringExtra("latlng");
+        Bundle extras = getIntent().getExtras();
+        String latlng = extras.getString("latlng");
         String [] parts = latlng.split(" ");
         String lat = parts[0];
         String lng = parts[1];
