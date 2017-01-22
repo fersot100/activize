@@ -11,11 +11,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,7 +30,9 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnStatusChangedListener;
 import com.esri.core.geometry.Envelope;
+import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
+import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.TextSymbol;
@@ -148,7 +156,8 @@ public class PlacePicker extends AppCompatActivity {
                 LocatorGeocodeResult geocodeResult = result.get(0);
 
                 // get return geometry from geocode result
-                final Point resultPoint = geocodeResult.getLocation();
+                SpatialReference sp = SpatialReference.create(4326);
+                final Point resultPoint = (Point) GeometryEngine.project(geocodeResult.getLocation(), mapView.getSpatialReference(), sp);
                 // create marker symbol to represent location
                 SimpleMarkerSymbol resultSymbol = new SimpleMarkerSymbol(Color.RED, 16, SimpleMarkerSymbol.STYLE.CROSS);
                 // create graphic object for resulting location
@@ -174,12 +183,12 @@ public class PlacePicker extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager(), "dialog");
                 }
             }
-
         }
 
-    public static class PlacePickerDialog extends DialogFragment{
+    public static class PlacePickerDialog extends DialogFragment {
+        public PlacePickerDialog(){}
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState){
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(R.string.select_prompt)
                     .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
@@ -201,6 +210,7 @@ public class PlacePicker extends AppCompatActivity {
                     });
             return builder.create();
         }
+
     }
 
 
