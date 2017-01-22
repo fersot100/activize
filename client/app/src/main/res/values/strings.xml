@@ -7,8 +7,6 @@
     <string name="address_search">Searching for Address</string>
     <string name="addressSearchFailed">Address search failed</string>
     <string name="noResultsFound">No results found</string>
-
-
     <string name="hint_event_name">Event Name</string>
     <string name="hint_event_description">Description</string>
     <string name="hint_event_time">Time</string>
@@ -19,4 +17,5 @@
     <string name="err_msg_description">Event must have a description</string>
     <string name="err_msg_time">Event must have a valid time</string>
     <string name="err_msg_date">Event must have a valid date</string>
+    <string name="title_activity_place_picker">PlacePicker</string>
 </resources>

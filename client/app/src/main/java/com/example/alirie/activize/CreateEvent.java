@@ -1,39 +1,52 @@
 package com.example.alirie.activize;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.event.OnStatusChangedListener;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
 import com.esri.android.map.MapView;
+import com.esri.core.map.Graphic;
+import com.esri.core.symbol.SimpleMarkerSymbol;
+import com.esri.core.symbol.TextSymbol;
 import com.esri.core.tasks.geocode.Locator;
 import com.esri.core.tasks.geocode.LocatorFindParameters;
 import com.esri.core.tasks.geocode.LocatorGeocodeResult;
-
 import java.util.Calendar;
 import java.util.List;
 
 public class CreateEvent extends AppCompatActivity {
-    MapView mapView;
     GraphicsLayer locationLayer;
+    static final int LOCATION_REQUEST = 1;
+    MapView mapView;
     Point locationLayerPoint;
     String locationLayerPointString, timeForExport, AM_PM, id;
     int eventDay, eventMonth, eventYear, year, month, day;
@@ -56,79 +69,19 @@ public class CreateEvent extends AppCompatActivity {
         day = now.monthDay;
     }
 
-    private class LocatorAsyncTask extends AsyncTask<LocatorFindParameters, Void, List<LocatorGeocodeResult>> {
-        private Exception exception;
-        @Override
-        protected List<LocatorGeocodeResult> doInBackground(LocatorFindParameters... params) {
-            exception = null;
-            List<LocatorGeocodeResult> results = null;
-            Locator locator = Locator.createOnlineLocator();
-            try {
-                results = locator.find(params[0]);
-            } catch (Exception e) {
-                exception = e;
-            }
-            return results;
-        }
+    public void pickPlace(View view){
+        Intent i = new Intent(getApplicationContext(), PlacePicker.class);
+        startActivityForResult(i, LOCATION_REQUEST);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        View searchRef = menu.findItem(R.id.action_search).getActionView();
-        searchBar = (EditText) searchRef.findViewById(R.id.searchText);
-        searchBar.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if(keyCode == KeyEvent.KEYCODE_ENTER){
-                    onSearchButtonClicked(searchBar);
-                    return true;
-                }
-                return false;
-            }
-        });
-        return true;
-    }
-
-    private void locate(String address){
-        // Create Locator parameters from single line address string
-        LocatorFindParameters findParams = new LocatorFindParameters(address);
-
-        // Use the centre of the current map extent as the find location point
-        findParams.setLocation(mapView.getCenter(), mapView.getSpatialReference());
-
-        // Calculate distance for find operation
-        Envelope mapExtent = new Envelope();
-        mapView.getExtent().queryEnvelope(mapExtent);
-        // assume map is in metres, other units wont work, double current envelope
-        double distance = (mapExtent != null && mapExtent.getWidth() > 0) ? mapExtent.getWidth() * 2 : 10000;
-        findParams.setDistance(distance);
-        findParams.setMaxLocations(2);
-
-        // Set address spatial reference to match map
-        findParams.setOutSR(mapView.getSpatialReference());
-
-        // Execute async task to find the address
-        new LocatorAsyncTask().execute(findParams);
-        locationLayerPointString = address;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item){
-        int id = item.getItemId();
-        if (id == R.id.action_search) {
-            return true;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (resultCode == RESULT_OK){
+            //show dialog with little map
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    public void onSearchButtonClicked(View view){
-        InputMethodManager inputManager = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        String address = searchBar.getText().toString();
-        locate(address);
-    }
-
-    //opens date picker dialog
+//opens date picker dialog
     public void pickDate (View v) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
