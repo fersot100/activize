@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         client.newCall(request).enqueue(callback);
     }
 
-    //get a single event by ID
+    //get a single event by ID and open page
     public void getEventById(String url, String id) throws IOException{
         String uri = url + "/events/" + id;
         final Request req = new Request.Builder()
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject event = new JSONObject(response.body().string());
                     response.close();
+                    openNewEventPage(createEventObject(event));
                 }catch (Exception e) {
                     e.printStackTrace();}
             }
@@ -93,6 +95,29 @@ public class MainActivity extends AppCompatActivity {
         client.newCall(req).enqueue(callback);
     }
 
+    private void openNewEventPage(Event eventToOpen){
+        Intent i = new Intent(getApplicationContext(), EventPage.class);
+        i.putExtra("name", eventToOpen.getName());
+        i.putExtra("description", eventToOpen.getDescription());
+        i.putExtra("latlng", eventToOpen.getLatLng());
+        i.putExtra("dateTime", eventToOpen.getDateTime());
+        i.putExtra("address", eventToOpen.getAddress());
+        startActivity(i);
+    }
+
+    private Event createEventObject(JSONObject event){
+        try{
+            String name = event.getString("name");
+            String description = event.getString("description");
+            String latlng = event.getString("latlng");
+            String address = event.getString("address");
+            String time = event.getString("startTime");
+            return new Event(name, description, time, latlng, address);
+        }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public void createEvent(View v){
         Intent i = new Intent(getApplicationContext(), CreateEvent.class);
