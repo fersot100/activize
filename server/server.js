@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 
 //POST Events
 app.post('/events', function(req, res){
-	var body = req.body
+	var body = req.body;
 	console.log(body);
 	db.events.create(body).then(function(event){
 		res.json(event.toJSON());
