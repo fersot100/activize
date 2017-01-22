@@ -39,8 +39,10 @@ import com.esri.core.symbol.TextSymbol;
 import com.esri.core.tasks.geocode.Locator;
 import com.esri.core.tasks.geocode.LocatorFindParameters;
 import com.esri.core.tasks.geocode.LocatorGeocodeResult;
+import com.esri.core.tasks.geocode.LocatorReverseGeocodeResult;
 
 import java.util.List;
+import java.util.Map;
 
 public class PlacePicker extends AppCompatActivity {
     Boolean isMapLoaded;
@@ -50,8 +52,10 @@ public class PlacePicker extends AppCompatActivity {
     String locationLayerPointString;
     static Point locationLayerPoint;
     AlertDialog dialogGlobal = null;
-    public static final String Result_DATA = "Result_DATA";
-    static final int RESULT_CODE = 2;
+    public static final String Result_LATLNG = "Result_LATLNG";
+    public static final String Result_ADDRESS = "Result_ADDRESS";
+    static final int RESULT_OK = 2;
+    static String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +133,7 @@ public class PlacePicker extends AppCompatActivity {
 
     private class LocatorAsyncTask extends AsyncTask<LocatorFindParameters, Void, List<LocatorGeocodeResult>> {
         private Exception mException;
+
         @Override
         protected List<LocatorGeocodeResult> doInBackground(LocatorFindParameters... params) {
             mException = null;
@@ -136,9 +141,11 @@ public class PlacePicker extends AppCompatActivity {
             Locator locator = Locator.createOnlineLocator();
             try {
                 results = locator.find(params[0]);
+
             } catch (Exception e) {
                 mException = e;
             }
+
             return results;
         }
         protected void onPostExecute(List<LocatorGeocodeResult> result) {
@@ -166,7 +173,7 @@ public class PlacePicker extends AppCompatActivity {
                 locationLayer.addGraphic(resultLocGraphic);
 
                 // create text symbol for return address
-                String address = geocodeResult.getAddress();
+                address = geocodeResult.getAddress();
                 TextSymbol resultAddress = new TextSymbol(20, address, Color.BLACK);
                 // create offset for text
                 resultAddress.setOffsetX(-4 * address.length());
@@ -183,6 +190,7 @@ public class PlacePicker extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager(), "dialog");
                 }
             }
+
         }
 
     public static class PlacePickerDialog extends DialogFragment {
@@ -195,10 +203,11 @@ public class PlacePicker extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             Double latitude = locationLayerPoint.getY();
                             Double longitude = locationLayerPoint.getX();
-                            dialog.dismiss();
                             Intent sendIntent = new Intent();
-                            sendIntent.putExtra(Result_DATA, latitude + " " + longitude);
-                            getActivity().setResult(RESULT_CODE, sendIntent);
+                            sendIntent.putExtra(Result_LATLNG, latitude + " " + longitude);
+                            sendIntent.putExtra(Result_ADDRESS, address.toString());
+                            getActivity().setResult(RESULT_OK, sendIntent);
+                            dialog.dismiss();
                             getActivity().finish();
                         }
                     })

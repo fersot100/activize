@@ -40,12 +40,17 @@ import com.esri.core.symbol.TextSymbol;
 import com.esri.core.tasks.geocode.Locator;
 import com.esri.core.tasks.geocode.LocatorFindParameters;
 import com.esri.core.tasks.geocode.LocatorGeocodeResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 import java.util.List;
 
 public class CreateEvent extends AppCompatActivity {
     GraphicsLayer locationLayer;
     static final int LOCATION_REQUEST = 1;
+    static final int REQUEST_OK = 2;
     MapView mapView;
     Point locationLayerPoint;
     String locationLayerPointString, timeForExport, AM_PM, id;
@@ -77,14 +82,27 @@ public class CreateEvent extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 2){
+        if (resultCode == REQUEST_OK){
             //set edittext to address
-            locationElement.setText(data.getStringExtra("Result_DATA"));
-            Toast.makeText(this, data.getStringExtra("Result_DATA"),  Toast.LENGTH_LONG).show();
+            String latlng = data.getStringExtra("Result_LATLNG");
+            String address = data.getStringExtra("Result_ADDRESS");
+            String [] parts = latlng.split(" ");
+            String lat = parts[0];
+            String lng = parts[1];
+            locationElement.setText(lat + " " + lng);
+            locationElement.append(address);
+            try {
+                JSONObject locationJSON = new JSONObject();
+                locationJSON.put("Latitude", lat);
+                locationJSON.put("Longitude", lng);
+                locationJSON.put("Address", address);
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
         }
     }
 
-//opens date picker dialog
+    //opens date picker dialog
     public void pickDate (View v) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
@@ -139,6 +157,11 @@ public class CreateEvent extends AppCompatActivity {
                 }, hour, minute, false);
         timePickerDialog.show();
         ;
+
+    }
+
+    public void createNewEvent(View v){
+        //Event newEvent = new Event()
 
     }
 
