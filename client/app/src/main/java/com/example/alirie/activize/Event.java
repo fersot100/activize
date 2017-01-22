@@ -8,6 +8,8 @@ public class Event {
         eventName = name;
         eventTime = dateTime;
         eventDescription = description;
+        eventLatLng = latlng;
+        eventAddress = address;
     }
     public Event(){
     }
