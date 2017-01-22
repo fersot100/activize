@@ -1,13 +1,16 @@
 package com.example.alirie.activize;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -38,6 +41,8 @@ public class PlacePicker extends AppCompatActivity {
     EditText searchBar;
     String locationLayerPointString;
     Point locationLayerPoint;
+    public static final String Result_DATA = "Result_DATA";
+    static final int REQUEST_RESULT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,28 +92,8 @@ public class PlacePicker extends AppCompatActivity {
         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         String address = searchBar.getText().toString();
         executeLocatorTask(address);
-        //show dialog asking if they'd like to select
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        builder.setMessage(R.string.search_prompt);
-        builder.setPositiveButton(R.string.select, new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int id) {
-                Double longitude = locationLayerPoint.getX();
-                Double latitude = locationLayerPoint.getY();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
 
     }
-
-
-
 
     private void executeLocatorTask(String address) {
         // Create Locator parameters from single line address string
@@ -162,7 +147,7 @@ public class PlacePicker extends AppCompatActivity {
                 LocatorGeocodeResult geocodeResult = result.get(0);
 
                 // get return geometry from geocode result
-                Point resultPoint = geocodeResult.getLocation();
+                final Point resultPoint = geocodeResult.getLocation();
                 // create marker symbol to represent location
                 SimpleMarkerSymbol resultSymbol = new SimpleMarkerSymbol(Color.RED, 16, SimpleMarkerSymbol.STYLE.CROSS);
                 // create graphic object for resulting location
@@ -185,8 +170,36 @@ public class PlacePicker extends AppCompatActivity {
 
                 // Zoom map to geocode result location
                 mapView.zoomToResolution(geocodeResult.getLocation(), 2);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(PlacePicker.this);
+                builder.setMessage(R.string.select_prompt)
+                        .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Double latitude = resultPoint.getY();
+                                Double longitude = resultPoint.getX();
+                                dialog.dismiss();
+                                Intent sendIntent = new Intent();
+                                sendIntent.putExtra(Result_DATA, latitude + " " + longitude);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                builder.create().show();
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // When the user hits the back button set the resultCode
+        // to Activity.RESULT_CANCELED to indicate a failure
+        setResult(Activity.RESULT_CANCELED);
+        super.onBackPressed();
+    }
+
 
 }

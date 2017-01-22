@@ -18,7 +18,7 @@
     <string name="err_msg_time">Event must have a valid time</string>
     <string name="err_msg_date">Event must have a valid date</string>
     <string name="title_activity_place_picker">PlacePicker</string>
-    <string name="search_prompt">Select this location?</string>
+    <string name="select_prompt">Select this location?</string>
     <string name="select">Select</string>
     <string name="cancel">Cancel</string>
 </resources>

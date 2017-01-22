@@ -52,8 +52,7 @@ public class CreateEvent extends AppCompatActivity {
     int eventDay, eventMonth, eventYear, year, month, day;
     int minute, hour;
     Boolean isMapLoaded;
-    EditText searchBar;
-    EditText timeElement, dateElement;
+    EditText timeElement, dateElement, locationElement;
     Time now = new Time();
     Time eventTime = new Time();
 
@@ -63,6 +62,7 @@ public class CreateEvent extends AppCompatActivity {
         setContentView(R.layout.activity_create_event);
         dateElement = (EditText) findViewById(R.id.input_date);
         timeElement = (EditText) findViewById(R.id.input_time);
+        locationElement = (EditText) findViewById(R.id.input_location);
         now.setToNow();
         year = now.year;
         month = now.month;
@@ -76,8 +76,10 @@ public class CreateEvent extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK){
-            //show dialog with little map
+            //set edittext to address
+            locationElement.setText(data.getStringExtra("Result_DATA"));
         }
     }
 
