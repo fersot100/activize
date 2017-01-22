@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
                 "dreams",
                 "creams",
                 "queens",
-                "peens"
         };
         ArrayAdapter<String> eventAdapter =
                 new ArrayAdapter<String>(this,
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("name", eventToOpen.getName());
         i.putExtra("description", eventToOpen.getDescription());
         i.putExtra("latlng", eventToOpen.getLatLng());
-        i.putExtra("dateTime", eventToOpen.getDateTime());
+        i.putExtra("startTime", eventToOpen.getDateTime());
         i.putExtra("address", eventToOpen.getAddress());
         startActivity(i);
     }
@@ -109,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
         try{
             String name = event.getString("name");
             String description = event.getString("description");
-            String latlng = event.getString("latlng");
+            String latlong = event.getString("latlng");
             String address = event.getString("address");
             String time = event.getString("startTime");
-            return new Event(name, description, time, latlng, address);
+            return new Event(name, description, time, latlong, address);
         }catch (JSONException e){
             e.printStackTrace();
             return null;

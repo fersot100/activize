@@ -90,6 +90,7 @@ public class HttpMethods {
         String json = eventJSON.toString();
         try{
             post("http://ec2-35-165-244-31.us-west-2.compute.amazonaws.com/events", json);
+            Log.i("log", json.toString());
         }catch (IOException e){
 
         }
