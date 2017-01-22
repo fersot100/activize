@@ -6,10 +6,5 @@
     android:layout_height="match_parent"
     tools:context="com.example.alirie.activize.EventPage">
 
-    <com.esri.android.map.MapView
-        android:id="@+id/eventMap"
-        android:layout_width="fill_parent"
-        android:layout_height="300dp">
-    </com.esri.android.map.MapView>
 
 </RelativeLayout>

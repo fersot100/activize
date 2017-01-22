@@ -74,54 +74,25 @@ public class HttpMethods {
         });
     }
 
-    //get all events
-    public void getEvents(String url) throws IOException{
-        final Request request = new Request.Builder()
-                .url(url)
-                .build();
+    void export(Event event) {
+        JSONObject eventJSON = new JSONObject();
+        try {
+            eventJSON.put("name", event.getName());
+            eventJSON.put("description", event.getDescription());
+            eventJSON.put("latlng", event.getLatLng());
+            eventJSON.put("startTime", event.getDateTime());
+            eventJSON.put("address", event.getAddress());
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        String json = eventJSON.toString();
+        try{
+            post("http://ec2-35-165-244-31.us-west-2.compute.amazonaws.com/events", json);
+        }catch (IOException e){
 
-        final Callback callback = new Callback(){
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    //get JSONArray of events
-                    JSONArray events = new JSONArray(response.body().string());
-                    response.close();
-                    //TODO: something with the arrya
-                }catch (Exception e) {
-                    e.printStackTrace();}
-            }
-        };
-        client.newCall(request).enqueue(callback);
+        }
     }
 
-    //get a single event by ID
-    public void getEventById(String url, String id) throws IOException{
-        String uri = url + "/events/" + id;
-        final Request req = new Request.Builder()
-                .url(uri)
-                .build();
-        final Callback callback = new Callback(){
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    JSONObject event = new JSONObject(response.body().string());
-                    response.close();
-                    //TODO:something with the event object
-                }catch (Exception e) {
-                    e.printStackTrace();}
-            }
-        };
-        client.newCall(req).enqueue(callback);
-    }
 
 }
 
