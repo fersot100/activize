@@ -30,35 +30,8 @@ import okhttp3.ResponseBody;
 public class HttpMethods {
     private OkHttpClient client = new OkHttpClient();
     private String postResponse;
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
-    public HttpMethods(){}
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    public String httpGET(URL url) throws IOException {
-        String jsonResponse = "";
-        HttpURLConnection urlConnection = null;
-        InputStream inputStream = null;
-        try {
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
-            urlConnection.connect();
-            inputStream = urlConnection.getInputStream();
-            jsonResponse = readFromStream(inputStream);
-        } catch (IOException e) {
-            // TODO: Handle the exception
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (inputStream != null) {
-                // function must handle java.io.IOException here
-                inputStream.close();
-            }
-        }
-        return jsonResponse;
-    }
     /* OKHttp Methods */
     void post(String url, String json) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
@@ -149,50 +122,6 @@ public class HttpMethods {
         };
         client.newCall(req).enqueue(callback);
     }
-
-    public String httpPOST(URL url) throws IOException{
-        String jsonResponse = "";
-        HttpURLConnection urlConnection = null;
-        InputStream inputStream = null;
-        try {
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
-            urlConnection.connect();
-            inputStream = urlConnection.getInputStream();
-            jsonResponse = readFromStream(inputStream);
-        } catch (IOException e) {
-            // TODO: Handle the exception
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (inputStream != null) {
-                // function must handle java.io.IOException here
-                inputStream.close();
-            }
-        }
-        return jsonResponse;
-    }
-
-    // Request a string response from the provided URL.
-    StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-            new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    // Display the first 500 characters of the response string.
-                    mTextView.setText("Response is: "+ response.substring(0,500));
-                }
-            }, new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            mTextView.setText("That didn't work!");
-        }
-    });
-// Add the request to the RequestQueue.
-    queue.add(stringRequest);
-
 
 }
 
