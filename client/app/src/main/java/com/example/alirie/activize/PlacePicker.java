@@ -88,32 +88,26 @@ public class PlacePicker extends AppCompatActivity {
         String address = searchBar.getText().toString();
         executeLocatorTask(address);
         //show dialog asking if they'd like to select
-        selectLocationDialog dialog = new selectLocationDialog();
-        dialog.show(getSupportFragmentManager(), "locationPicker");
-        Double longitude = locationLayerPoint.getX();
-        Double latitude = locationLayerPoint.getY();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage(R.string.search_prompt);
+        builder.setPositiveButton(R.string.select, new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id) {
+                Double longitude = locationLayerPoint.getX();
+                Double latitude = locationLayerPoint.getY();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
-    public static class selectLocationDialog extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the Builder class for convenient dialog construction
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.search_prompt)
-                    .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
 
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
-            // Create the AlertDialog object and return it
-            return builder.create();
-        }
-    }
 
 
     private void executeLocatorTask(String address) {
