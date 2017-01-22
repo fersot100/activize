@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         //hide splash, display events
         //toolbar w/ "sort by" and "create event"
         //clicking on an event brings up event page with map
-        /*String events[] = {
+        String events[] = {
                 "memes",
                 "dreams",
                 "creams",
@@ -35,9 +35,8 @@ public class MainActivity extends AppCompatActivity {
                         R.id.event,
                         events
                 );
-        ListView eventList = new ListView(this);
-        setContentView(eventList);
-        eventList.setAdapter(eventAdapter);*/
+        ListView eventList = (ListView) findViewById(R.id.list);
+        eventList.setAdapter(eventAdapter);
     }
 
 
