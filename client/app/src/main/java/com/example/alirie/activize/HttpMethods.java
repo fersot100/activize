@@ -47,7 +47,7 @@ public class HttpMethods {
         }
         return jsonResponse;
     }
-    public String httpPOST(URL url) throws IOException{
+    public String httpPOST(URL url, String body) throws IOException{
         String jsonResponse = "";
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;

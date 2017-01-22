@@ -68,7 +68,7 @@ public class CreateEvent extends AppCompatActivity {
         dateElement = (EditText) findViewById(R.id.input_date);
         timeElement = (EditText) findViewById(R.id.input_time);
         locationElement = (EditText) findViewById(R.id.input_location);
-        nameElement = (EditText) findViewById()
+        nameElement = (EditText) findViewById(R.id.input_event_name);
         now.setToNow();
         year = now.year;
         month = now.month;
@@ -163,7 +163,7 @@ public class CreateEvent extends AppCompatActivity {
 
     public void createNewEvent(View v){
 
-        Event newEvent = new Event()
+        Event newEvent = new Event();
 
     }
 
